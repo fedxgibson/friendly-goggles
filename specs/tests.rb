@@ -1,10 +1,21 @@
 require 'test/unit'
-require_relative './naming_service'
+require_relative '../system'
+require_relative '../services/naming_service'
  
-class NamingServiceTest < Test::Unit::TestCase
+class NamingServiceTesting < Test::Unit::TestCase
+	def initialize(args)
+		super(args)
+		@system = System.instance
+		@service = NamingService.new(@system)
+	end
+
+	def teardown
+		@system.services[:db].reset
+	end
+
   def test_base_case
-    result = NamingService.solution('')
-    assert_equal(result, '')
+    result = @service.solution('')
+    assert_equal('', result)
   end
 
   def test_one_photo_one_city
@@ -14,8 +25,8 @@ class NamingServiceTest < Test::Unit::TestCase
 		output = %w(
 			Florianopolis1.jpg
 		)
-    result = NamingService.solution(input.join('\n'))
-    assert_equal(result, output.join('\n'))
+    result = @service.solution(input.join('\n'))
+    assert_equal(output.join('\n'), result)
 	rescue StandardError => e 
 		puts e.backtrace.inspect
   end
@@ -29,8 +40,8 @@ class NamingServiceTest < Test::Unit::TestCase
 			Florianopolis1.jpg
 			Florianopolis2.jpg
 		)
-    result = NamingService.solution(input.join('\n'))
-    assert_equal(result, output.join('\n'))
+    result = @service.solution(input.join('\n'))
+    assert_equal(output.join('\n'), result)
   end
 
   def test_two_photos_one_city_different_order
@@ -42,8 +53,8 @@ class NamingServiceTest < Test::Unit::TestCase
 			Florianopolis2.jpg
 			Florianopolis1.jpg
 		)
-    result = NamingService.solution(input.join('\n'))
-    assert_equal(result, output.join('\n'))
+    result = @service.solution(input.join('\n'))
+    assert_equal(output.join('\n'), result)
   end
 
   def test_two_photos_two_cities_different_order
@@ -59,8 +70,8 @@ class NamingServiceTest < Test::Unit::TestCase
 			Florianopolis1.jpg
 			London2.jpg
 		)
-    result = NamingService.solution(input.join('\n'))
-    assert_equal(result, output.join('\n'))
+    result = @service.solution(input.join('\n'))
+    assert_equal(output.join('\n'), result)
   end
 
   def test_ten_photos_one_city
@@ -88,7 +99,7 @@ class NamingServiceTest < Test::Unit::TestCase
 			Krakow05.png
 			Krakow10.jpg
 		)
-    result = NamingService.solution(input.join('\n'))
-    assert_equal(result, output.join('\n'))
+    result = @service.solution(input.join('\n'))
+    assert_equal(output.join('\n'), result)
   end
 end
